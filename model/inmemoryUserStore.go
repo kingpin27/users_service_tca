@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"log"
 	"sync"
 )
 
@@ -96,12 +95,10 @@ func (store *InMemoryUserStore) CreateUser(user User) (*User, error) {
 }
 
 func (store *InMemoryUserStore) Search(queryUser User) ([]User, error) {
-	log.Println((queryUser))
 	store.RLock()
 	defer store.RUnlock()
 	var users []User
 	for _, user := range store.Users {
-		log.Println(user)
 		if queryUser.Id != 0 && queryUser.Id != user.Id {
 			continue
 		}
