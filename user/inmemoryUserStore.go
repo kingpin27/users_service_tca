@@ -72,7 +72,10 @@ func (store *InMemoryUserStore) UpdateUser(user User) error {
 	if user.Height == 0 {
 		user.Height = store.Users[user.Id].Height
 	}
-
+	if user.Married == MARITAL_STATUS_NOT_SET {
+		user.Married = store.Users[user.Id].Married
+	}
+	store.Users[user.Id] = user
 	return nil
 }
 
@@ -96,22 +99,22 @@ func (store *InMemoryUserStore) Search(queryUser User) ([]User, error) {
 	defer store.RUnlock()
 	var users []User
 	for _, user := range store.Users {
-		if queryUser.Id == 0 || queryUser.Id != user.Id {
+		if queryUser.Id != 0 && queryUser.Id != user.Id {
 			continue
 		}
-		if queryUser.FName == "" || queryUser.FName != user.FName {
+		if queryUser.FName != "" && queryUser.FName != user.FName {
 			continue
 		}
-		if queryUser.City == "" || queryUser.City != user.City {
+		if queryUser.City != "" && queryUser.City != user.City {
 			continue
 		}
-		if queryUser.Phone == 0 || queryUser.Phone != user.Phone {
+		if queryUser.Phone != 0 && queryUser.Phone != user.Phone {
 			continue
 		}
-		if queryUser.Height == 0 || queryUser.Height != user.Height {
+		if queryUser.Height != 0 && queryUser.Height != user.Height {
 			continue
 		}
-		if queryUser.Married == MARITAL_STATUS_NOT_SET || queryUser.Married != user.Married {
+		if queryUser.Married != MARITAL_STATUS_NOT_SET && queryUser.Married != user.Married {
 			continue
 		}
 		users = append(users, user)
