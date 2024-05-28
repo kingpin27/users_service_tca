@@ -1,4 +1,4 @@
-package user
+package model
 
 import "testing"
 
@@ -12,7 +12,7 @@ func TestCreateUser(t *testing.T) {
 		Height:  72,
 		Married: MARITAL_STATUS_TRUE,
 	}
-	err := store.CreateUser(user)
+	_, err := store.CreateUser(user)
 	if err != nil {
 		t.Errorf("Error creating user: %v", err)
 	}

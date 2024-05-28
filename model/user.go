@@ -1,4 +1,4 @@
-package user
+package model
 
 const (
 	MARITAL_STATUS_NOT_SET = 0

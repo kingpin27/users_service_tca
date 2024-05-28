@@ -2,6 +2,11 @@ FROM golang:1.22
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    unzip \
+    wget
+RUN sudo apt-get install protobuf-compiler
+
 COPY go.mod go.sum ./
 RUN go mod download
 
