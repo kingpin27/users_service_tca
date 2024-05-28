@@ -1,7 +1,8 @@
-package user
+package model
 
 import (
 	"errors"
+	"log"
 	"sync"
 )
 
@@ -79,26 +80,28 @@ func (store *InMemoryUserStore) UpdateUser(user User) error {
 	return nil
 }
 
-func (store *InMemoryUserStore) CreateUser(user User) error {
+func (store *InMemoryUserStore) CreateUser(user User) (*User, error) {
 	store.Lock()
 	defer store.Unlock()
 	if user.Id != 0 {
 		_, ok := store.Users[user.Id]
 		if ok {
-			return errors.New("User with this Id already exists")
+			return nil, errors.New("User with this Id already exists")
 		}
 	} else {
 		user.Id = uint32(len(store.Users) + 1)
 	}
 	store.Users[user.Id] = user
-	return nil
+	return &user, nil
 }
 
 func (store *InMemoryUserStore) Search(queryUser User) ([]User, error) {
+	log.Println((queryUser))
 	store.RLock()
 	defer store.RUnlock()
 	var users []User
 	for _, user := range store.Users {
+		log.Println(user)
 		if queryUser.Id != 0 && queryUser.Id != user.Id {
 			continue
 		}
